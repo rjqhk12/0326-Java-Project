@@ -28,7 +28,7 @@ public class JavaProject extends JFrame implements ActionListener {
 	DefaultTableModel model;
 	DbConnect db=new DbConnect();
 	
-	SawonAdd addSawon;
+	SawonAdd addSawon=new SawonAdd("성적추가폼");
 
 		//생성자
 		public JavaProject(String title) {

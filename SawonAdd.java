@@ -1,14 +1,16 @@
-package day0326;
+package Java_Project;
 
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class SawonAdd extends JFrame{
+public class SawonAdd extends JFrame {
 	
 	Container cp;
 	JTextField tfName,tfDept,tfPos,tfTel,tfEmail,tfAddr;
@@ -24,7 +26,7 @@ public class SawonAdd extends JFrame{
 	cp=this.getContentPane();
 	cp.setBackground(Color.white);
 	initDesign();
-	this.setVisible(true);
+	this.setVisible(false);
 	}
 	
 	public void initDesign()
@@ -80,5 +82,7 @@ public class SawonAdd extends JFrame{
 		// TODO Auto-generated method stub
 		new SawonAdd("사원정보입력");
 	}
+
+	
 
 }

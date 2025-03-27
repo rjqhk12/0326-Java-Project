@@ -1,4 +1,4 @@
-package day0326;
+package Java_Project;
 
 import java.awt.Color;
 import java.awt.Container;
