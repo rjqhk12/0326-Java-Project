@@ -1,7 +1,10 @@
 package Java_Project;
 
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.Graphics;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.Connection;
@@ -10,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Vector;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,8 +21,10 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import Java_Project.SawonAdd.PhotoDraw;
 import day0319.DbConnect;
 
 public class Java2 extends JFrame implements ActionListener {
@@ -28,16 +34,22 @@ public class Java2 extends JFrame implements ActionListener {
 	JTable table;
 	DefaultTableModel model;
 	DbConnect db=new DbConnect();
+	String imageName;
+
+	PhotoDraw pDraw=new PhotoDraw();
 	
 	SawonAdd addSawon=new SawonAdd("사원추가폼");
-	SawonUpdate updateSawon=new SawonUpdate("사원수정폼");
+	SawonUpdate updateSawon=new SawonUpdate("사원수정폼") ;
+	
+	
+	
 	
 
 		//생성자
 		public Java2(String title) {
 			super(title);//JFrame 부모생성자를 통해서 창제목으로 제목을 보게하자
 			
-			this.setBounds(200, 100, 1000, 500);
+			this.setBounds(200, 100, 900, 500);
 			
 			//색상
 			//this.setBackground(Color.BLUE); // 이렇게만 하면 안나옴.
@@ -60,9 +72,21 @@ public class Java2 extends JFrame implements ActionListener {
 			model=new DefaultTableModel(title, 0);
 			table=new JTable(model);
 			
+			table.getColumnModel().getColumn(0).setPreferredWidth(30); //셀너비
+			table.getColumnModel().getColumn(1).setPreferredWidth(80);
+			table.getColumnModel().getColumn(2).setPreferredWidth(60);
+			table.getColumnModel().getColumn(3).setPreferredWidth(60);
+			table.getColumnModel().getColumn(4).setPreferredWidth(40);
+			
 			JScrollPane js=new JScrollPane(table);
 			js.setBounds(30, 80, 500, 300);
 			this.add(js);
+			
+			
+
+			/*jp=new JPanel();
+			jp.setBounds(550, 30, 320, 380);		
+			this.add(jp);*/
 			
 			
 			SelectSawon();
@@ -101,7 +125,7 @@ public class Java2 extends JFrame implements ActionListener {
 			
 			
 			
-			
+
 			
 			addSawon.btnAdd.addActionListener(this);
 			updateSawon.btnUpdate.addActionListener(this);
@@ -110,13 +134,87 @@ public class Java2 extends JFrame implements ActionListener {
 		
 		public void SawonInfo(String num)
 		{
-			Connection
 			
 			
 			
 			
 			
 			
+			Connection conn=db.getConnection();
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			String name = null,dept = null,position = null,tel = null,email = null,addr = null;
+			String sql="select * from sawonmanagement where id="+num;
+			
+			try {
+				pstmt=conn.prepareStatement(sql);
+				rs=pstmt.executeQuery();
+				
+				
+				while(rs.next())
+				{
+					
+						
+					
+					
+				 name=rs.getString("name");
+				 dept=rs.getString("dept");
+				 position=rs.getString("Position");
+				 tel=rs.getString("tel");
+				 email=rs.getString("email");
+				 addr=rs.getString("addr");
+				 imageName=rs.getString("imageName");
+				 
+				
+				
+				 
+				 
+				 	JLabel lblname= new JLabel("이름 : "+name);
+					lblname.setBounds(550, 200, 100, 30);
+					cp.add(lblname);
+
+					JLabel lbldept= new JLabel("부서 : "+dept);
+					lbldept.setBounds(550, 230, 100, 30);
+					cp.add(lbldept);
+					
+					JLabel lblposition= new JLabel("직급 : "+position);
+					lblposition.setBounds(550, 260, 100, 30);
+					cp.add(lblposition);
+					
+					JLabel lbltel= new JLabel("전화번호 : "+tel);
+					lbltel.setBounds(550, 290, 200, 30);
+					cp.add(lbltel);
+					
+					
+					JLabel lblemail= new JLabel("이메일 : "+email);
+					lblemail.setBounds(550, 320, 200, 30);
+					cp.add(lblemail);
+					
+					JLabel lbladdr= new JLabel("주소 : "+addr);
+					lbladdr.setBounds(550, 350, 200, 30);
+					cp.add(lbladdr);	 
+					
+					pDraw.setBounds(550, 30, 140, 170);
+					
+					pDraw.setBackground(Color.white);
+					this.add(pDraw);				
+					//pDraw.repaint();
+					
+					
+					
+					
+				 
+				}
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally{
+				db.dbClose(rs, pstmt, conn);
+				
+			}
+			
+
 			
 		}
 		
@@ -131,7 +229,7 @@ public class Java2 extends JFrame implements ActionListener {
 			PreparedStatement pstmt=null;
 			ResultSet rs=null;
 			
-			String sql="select ROWNUM no,id,name,dept,position,tel,email,addr from SawonManagement order by no";
+			String sql="select ROWNUM no,id,name,dept,position,tel,email,addr from SawonManagement order by name";
 			
 			try {
 				pstmt=conn.prepareStatement(sql);
@@ -139,6 +237,7 @@ public class Java2 extends JFrame implements ActionListener {
 				
 				while(rs.next())
 				{
+					
 					Vector<String >data=new Vector<String>();
 					data.add(rs.getString("no"));
 					data.add(rs.getString("id"));
@@ -193,6 +292,7 @@ public class Java2 extends JFrame implements ActionListener {
 				pstmt.setString(7, imageName);
 				
 				pstmt.execute();
+				
 				
 				
 			} catch (SQLException e) {
@@ -281,6 +381,8 @@ public class Java2 extends JFrame implements ActionListener {
 			}finally {
 				db.dbClose(rs, pstmt, conn);
 			}
+			
+			
 			
 			
 		}
@@ -429,7 +531,8 @@ public class Java2 extends JFrame implements ActionListener {
 			}
 			
 			else if(ob==btnInfo)
-			{
+			{	
+				
 				int row=table.getSelectedRow()	;
 				
 				
@@ -440,6 +543,8 @@ public class Java2 extends JFrame implements ActionListener {
 				}
 				
 				String num=(String)model.getValueAt(row, 1);
+				
+				
 				SawonInfo(num);
 				
 				
@@ -452,6 +557,24 @@ public class Java2 extends JFrame implements ActionListener {
 			
 			
 		}
+		
+		class PhotoDraw extends Canvas{
+			
+			@Override
+			public void paint(Graphics g) {
+				// TODO Auto-generated method stub
+				super.paint(g);
+				
+				if(imageName!=null)
+				{
+
+					Image image=new ImageIcon(imageName).getImage();
+					g.drawImage(image, 0, 0,140,150, this);
+					
+				}
+			}
+		}
+		
 		
 
 		public static void main(String[] args) {
