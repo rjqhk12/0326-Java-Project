@@ -29,6 +29,7 @@ public class JavaProject extends JFrame implements ActionListener {
 	DbConnect db=new DbConnect();
 	
 	SawonAdd addSawon=new SawonAdd("사원추가폼");
+	SawonUpdate updateSawon=new SawonUpdate("사원수정폼");
 
 		//생성자
 		public JavaProject(String title) {
@@ -71,7 +72,7 @@ public class JavaProject extends JFrame implements ActionListener {
 			btnUpdate=new JButton("사원 수정");
 			btnUpdate.setBounds(130, 20, 90, 30);
 			this.add(btnUpdate);
-			btnAdd.addActionListener(this);
+			btnUpdate.addActionListener(this);
 
 			btnDel=new JButton("사원 삭제");
 			btnDel.setBounds(230, 20, 90, 30);
@@ -81,7 +82,7 @@ public class JavaProject extends JFrame implements ActionListener {
 			btnSearch=new JButton("사원 검색");
 			btnSearch.setBounds(330, 20, 90, 30);
 			this.add(btnSearch);
-			btnAdd.addActionListener(this);
+			btnSearch.addActionListener(this);
 
 			btnSelect=new JButton("전체 보기");
 			btnSelect.setBounds(430, 20, 90, 30);
@@ -89,6 +90,7 @@ public class JavaProject extends JFrame implements ActionListener {
 			btnSelect.addActionListener(this);
 			
 			addSawon.btnAdd.addActionListener(this);
+			updateSawon.btnUpdate.addActionListener(this);
 
 		}
 		public void SelectSawon()
@@ -169,6 +171,82 @@ public class JavaProject extends JFrame implements ActionListener {
 		
 		public void updateSawon()
 		{
+			String num=updateSawon.num;
+			String name=updateSawon.tfName.getText();
+			String dept=updateSawon.tfDept.getText();
+			String pos=updateSawon.tfPos.getText();
+			String tel=updateSawon.tfTel.getText();
+			String email=updateSawon.tfEmail.getText();
+			String addr=updateSawon.tfAddr.getText();
+			
+			String sql="update SawonManagement set name=?,dept=?,position=?,tel=?,email=?,addr=? where id=?";
+			
+			Connection conn=db.getConnection();
+			PreparedStatement pstmt=null;
+			
+			try {
+				pstmt=conn.prepareStatement(sql);
+				
+				pstmt.setString(1, name);
+				pstmt.setString(2, dept);
+				pstmt.setString(3, pos);
+				pstmt.setString(4, tel);
+				pstmt.setString(5, email);
+				pstmt.setString(6, addr);
+				pstmt.setString(7, num);
+				
+				pstmt.executeUpdate();
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+				db.dbClose(pstmt, conn);
+			}
+			
+			
+		}
+		
+		public void oneSawonData(String num)
+		{
+			
+			String sql="select * from SawonManagement where id="+num;
+			
+			Connection conn=db.getConnection();
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			
+			try {
+				pstmt=conn.prepareStatement(sql);
+				rs=pstmt.executeQuery();
+				
+				if(rs.next())
+				{
+					updateSawon.num=num;
+					updateSawon.tfName.setText(rs.getString("name"));
+					updateSawon.tfDept.setText(rs.getString("dept"));
+					updateSawon.tfPos.setText(rs.getString("position"));
+					updateSawon.tfTel.setText(rs.getString("tel"));
+					updateSawon.tfEmail.setText(rs.getString("email"));
+					updateSawon.tfAddr.setText(rs.getString("addr"));
+					
+					updateSawon.setVisible(true);
+				}else
+				{
+					System.out.println("없는번호");
+				}
+				
+				
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				db.dbClose(rs, pstmt, conn);
+			}
+			
 			
 		}
 		
@@ -239,6 +317,20 @@ public class JavaProject extends JFrame implements ActionListener {
 				
 				addSawon.setVisible(false);
 			}
+			else if (ob==btnUpdate)
+			{
+				String num=JOptionPane.showInputDialog("번호입력");
+				this.oneSawonData(num);
+				//updateSawon.setVisible(true);
+			}
+			else if(ob==updateSawon.btnUpdate)
+			{
+				this.updateSawon();
+				this.SelectSawon();
+				updateSawon.setVisible(false);
+			}
+			
+			
 		}
 		
 		
