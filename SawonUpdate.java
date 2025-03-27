@@ -1,19 +1,31 @@
 package Java_Project;
 
+import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Container;
+import java.awt.FileDialog;
+import java.awt.Graphics;
+import java.awt.Image;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class SawonUpdate extends JFrame{
+import Java_Project.SawonAdd.PhotoDraw;
+
+public class SawonUpdate extends JFrame implements ActionListener{
 	
 	Container cp;
 	JTextField tfName,tfDept,tfPos,tfTel,tfEmail,tfAddr;
-	JButton btnUpdate;
+	JButton btnUpdate, btnImage;
 	String num;
+	String imageName;
+	
+	PhotoDraw pDraw=new PhotoDraw();
 	
 	public SawonUpdate (String title) {
 	super(title); 
@@ -76,12 +88,63 @@ public class SawonUpdate extends JFrame{
 		btnUpdate.setBounds(100, 380, 180, 50);
 		this.add(btnUpdate);
 		
+		btnImage=new JButton("사진선택");
+		btnImage.setBounds(350, 210, 100, 30);
+		this.add(btnImage);
+		btnImage.addActionListener(this); 
+		
+		pDraw.setBounds(330, 30, 140, 170);
+		pDraw.setBackground(Color.orange);
+		this.add(pDraw);
+		
+		
+		
 		
 	}
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	Object ob= e.getSource();
+		
+		if(ob==btnImage)
+		{
+			FileDialog dlg=new FileDialog(this, "이미지 가져오기", FileDialog.LOAD);
+			dlg.setVisible(true);
+			imageName=dlg.getDirectory()+dlg.getFile(); 
+			
+			pDraw.repaint();
 
-	/*public static void main(String[] args) {
+		}
+		
+		
+	}
+	
+class PhotoDraw extends Canvas{
+		
+		@Override
+		public void paint(Graphics g) {
+			// TODO Auto-generated method stub
+			super.paint(g);
+			
+			if(imageName!=null)
+			{
+				Image image=new ImageIcon(imageName).getImage();
+				g.drawImage(image, 0, 0,130,150, this);
+				
+			}
+		}
+	}
+	
+	
+
+	
+
+	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new SawonUpdate("사원정보수정");
-	}*/
+	}
+
+	
 
 }
