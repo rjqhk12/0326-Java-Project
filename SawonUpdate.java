@@ -1,4 +1,4 @@
-package day0326;
+package Java_Project;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -13,6 +13,7 @@ public class SawonUpdate extends JFrame{
 	Container cp;
 	JTextField tfName,tfDept,tfPos,tfTel,tfEmail,tfAddr;
 	JButton btnUpdate;
+	String num;
 	
 	public SawonUpdate (String title) {
 	super(title); 

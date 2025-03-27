@@ -1,4 +1,4 @@
-package day0326;
+package Java_Project;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -101,7 +101,7 @@ public class JavaProject extends JFrame implements ActionListener {
 			PreparedStatement pstmt=null;
 			ResultSet rs=null;
 			
-			String sql="select * from SawonManagement order by id";
+			String sql="select ROWNUM no,id,name,dept,position,tel,email,addr from SawonManagement order by no";
 			
 			try {
 				pstmt=conn.prepareStatement(sql);
@@ -110,6 +110,7 @@ public class JavaProject extends JFrame implements ActionListener {
 				while(rs.next())
 				{
 					Vector<String >data=new Vector<String>();
+					data.add(rs.getString("no"));
 					data.add(rs.getString("id"));
 					data.add(rs.getString("name"));
 					data.add(rs.getString("dept"));
@@ -128,6 +129,7 @@ public class JavaProject extends JFrame implements ActionListener {
 				db.dbClose(rs, pstmt, conn);
 			}
 		}
+
 
 		
 		public void insertSawon()
@@ -249,7 +251,52 @@ public class JavaProject extends JFrame implements ActionListener {
 			
 			
 		}
+
 		
+		public void searchSawon(String fn)
+		{
+			
+			model.setRowCount(0);
+			Connection conn=db.getConnection();
+			PreparedStatement pstmt=null;
+			ResultSet rs=null;
+			
+			String sql="select ROWNUM no,id,name,dept,position,tel,email,addr from SawonManagement where name like ?";
+			
+			try {
+				pstmt=conn.prepareStatement(sql);
+				pstmt.setString(1, fn+"%");
+				rs=pstmt.executeQuery();
+				
+				while(rs.next())
+				{
+					Vector<String >data=new Vector<String>();
+					data.add(rs.getString("no"));
+					data.add(rs.getString("id"));
+					data.add(rs.getString("name"));
+					data.add(rs.getString("dept"));
+					data.add(rs.getString("position"));
+					data.add(rs.getString("tel"));
+					data.add(rs.getString("email"));
+					data.add(rs.getString("addr"));
+					
+					model.addRow(data);			
+				}
+				int n=pstmt.executeUpdate();	
+				if(n==1)
+					System.out.println("검색 성공");
+				else 
+					System.out.println("검색 실패");
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				db.dbClose(rs, pstmt, conn);
+				
+			}
+		}
 		
 		@Override
 		public void actionPerformed(ActionEvent e) {
@@ -271,7 +318,7 @@ public class JavaProject extends JFrame implements ActionListener {
 				SelectSawon();
 			}
 		
-			if(ob==btnDel)
+			else if(ob==btnDel)
 			{
 				int row=table.getSelectedRow()	;
 				System.out.println(row);
@@ -282,15 +329,16 @@ public class JavaProject extends JFrame implements ActionListener {
 					return;
 				}
 				
-				String num=(String)model.getValueAt(row, 0);
+				String num=(String)model.getValueAt(row, 1);
 				System.out.println(num);
 				
-				sql="delete from SawonMangement where id=num";
+				sql="delete from SawonManagement where id=?";
 						
 				try {
 					pstmt=conn.prepareStatement(sql);
 					
 					pstmt.setString(1, num);
+					
 					pstmt.execute();
 					
 					this.SelectSawon();
@@ -317,9 +365,20 @@ public class JavaProject extends JFrame implements ActionListener {
 				
 				addSawon.setVisible(false);
 			}
+			
+			
 			else if (ob==btnUpdate)
 			{
-				String num=JOptionPane.showInputDialog("번호입력");
+				int row=table.getSelectedRow() ;
+				
+				if(row==-1)
+				{
+					JOptionPane.showMessageDialog(this, "수정할 행을 선택해주세요.");
+					return;
+				}
+				String num=(String)model.getValueAt(row, 1);
+				
+				//String num=JOptionPane.showInputDialog("번호입력");
 				this.oneSawonData(num);
 				//updateSawon.setVisible(true);
 			}
@@ -329,14 +388,14 @@ public class JavaProject extends JFrame implements ActionListener {
 				this.SelectSawon();
 				updateSawon.setVisible(false);
 			}
-			
+			else if(ob==btnSearch)
+			{
+				String fn=JOptionPane.showInputDialog("검색할 사원의 성을 입력하세요.");
+				
+				searchSawon(fn);
+			}
 			
 		}
-		
-		
-		
-		
-
 		
 
 		public static void main(String[] args) {
