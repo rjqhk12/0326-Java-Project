@@ -26,6 +26,8 @@ public class JavaProject extends JFrame implements ActionListener {
 	JTable table;
 	DefaultTableModel model;
 	DbConnect db=new DbConnect();
+	
+	SawonAdd addSawon=new SawonAdd("사원추가폼");
 
 		//생성자
 		public JavaProject(String title) {
@@ -82,6 +84,8 @@ public class JavaProject extends JFrame implements ActionListener {
 			this.add(btnSelect);
 			btnSelect.addActionListener(this);
 			
+			addSawon.btnAdd.addActionListener(this);
+			
 
 		}
 		public void SelectSawon()
@@ -113,25 +117,50 @@ public class JavaProject extends JFrame implements ActionListener {
 				}
 
 				
-				
-				
-				
-				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			
 			
-			
-		
-		
-		
-		
 		
 		}
 		
+		public void insertSawon()
+		{
+			String name=addSawon.tfName.getText();
+			String dept=addSawon.tfDept.getText();
+			String pos=addSawon.tfPos.getText();
+			String tel=addSawon.tfTel.getText();
+			String email=addSawon.tfEmail.getText();
+			String addr=addSawon.tfAddr.getText();
+			
+			String sql="insert into SawonManagement values(seq_test.nextval,?,?,?,?,?,?)";
+			
+			Connection conn=db.getConnection();
+			PreparedStatement pstmt=null;
+			
+			try {
+				pstmt=conn.prepareStatement(sql);
+				
+				pstmt.setString(1, name);
+				pstmt.setString(2, dept);
+				pstmt.setString(3, pos);
+				pstmt.setString(4, tel);
+				pstmt.setString(5, email);
+				pstmt.setString(6, addr);
+				
+				pstmt.execute();
+				
+				
+			} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}finally {
+				db.dbClose(pstmt, conn);
+			}
 		
+		}
 		
 		
 		
@@ -152,11 +181,17 @@ public class JavaProject extends JFrame implements ActionListener {
 				SelectSawon();
 			}
 		
-			if(ob==btnAdd)
+			else if(ob==btnAdd)
 			{
-				
+				addSawon.setVisible(true);
 			}
-			
+			else if(ob==addSawon.btnAdd)
+			{
+				this.insertSawon();
+				
+				
+				addSawon.setVisible(false);
+			}
 			
 			
 			
