@@ -1,4 +1,4 @@
-package Java_Project;
+package day0326;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -28,7 +28,7 @@ public class JavaProject extends JFrame implements ActionListener {
 	DefaultTableModel model;
 	DbConnect db=new DbConnect();
 	
-	SawonAdd addSawon=new SawonAdd("성적추가폼");
+	SawonAdd addSawon=new SawonAdd("사원추가폼");
 
 		//생성자
 		public JavaProject(String title) {
@@ -88,6 +88,7 @@ public class JavaProject extends JFrame implements ActionListener {
 			this.add(btnSelect);
 			btnSelect.addActionListener(this);
 			
+			addSawon.btnAdd.addActionListener(this);
 
 		}
 		public void SelectSawon()
@@ -98,7 +99,7 @@ public class JavaProject extends JFrame implements ActionListener {
 			PreparedStatement pstmt=null;
 			ResultSet rs=null;
 			
-			String sql="select * from SawonManagement order by num";
+			String sql="select * from SawonManagement order by id";
 			
 			try {
 				pstmt=conn.prepareStatement(sql);
@@ -107,7 +108,7 @@ public class JavaProject extends JFrame implements ActionListener {
 				while(rs.next())
 				{
 					Vector<String >data=new Vector<String>();
-					data.add(rs.getString("num"));
+					data.add(rs.getString("id"));
 					data.add(rs.getString("name"));
 					data.add(rs.getString("dept"));
 					data.add(rs.getString("position"));
@@ -126,58 +127,6 @@ public class JavaProject extends JFrame implements ActionListener {
 			}
 		}
 
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-			Object ob=e.getSource();
-			
-			Connection conn=db.getConnection();
-			PreparedStatement pstmt=null;
-			String sql="";
-			
-			if(ob==btnAdd)
-			{
-				
-			}
-			
-			if(ob==btnSelect)
-			{
-				SelectSawon();
-			}
-		
-			if(ob==btnDel)
-			{
-				int row=table.getSelectedRow()	;
-				System.out.println(row);
-				
-				if(row==-1)
-				{
-					JOptionPane.showMessageDialog(this, "삭제할 행을 선택해주세요.");
-					return;
-				}
-				
-				String num=(String)model.getValueAt(row, 0);
-				System.out.println(num);
-				
-				sql="delete from SawonMangement where num=num";
-						
-				try {
-					pstmt=conn.prepareStatement(sql);
-					
-					pstmt.setString(1, num);
-					pstmt.execute();
-					
-					this.SelectSawon();
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}finally {
-					db.dbClose(pstmt, conn);
-				}
-			}
-		}
 		
 		public void insertSawon()
 		{
@@ -217,6 +166,82 @@ public class JavaProject extends JFrame implements ActionListener {
 			}
 		
 		}
+		
+		public void updateSawon()
+		{
+			
+		}
+		
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+			Object ob=e.getSource();
+			
+			Connection conn=db.getConnection();
+			PreparedStatement pstmt=null;
+			String sql="";
+			
+			if(ob==btnAdd)
+			{
+				addSawon.setVisible(true);
+			}
+			
+			else if(ob==btnSelect)
+			{
+				SelectSawon();
+			}
+		
+			if(ob==btnDel)
+			{
+				int row=table.getSelectedRow()	;
+				System.out.println(row);
+				
+				if(row==-1)
+				{
+					JOptionPane.showMessageDialog(this, "삭제할 행을 선택해주세요.");
+					return;
+				}
+				
+				String num=(String)model.getValueAt(row, 0);
+				System.out.println(num);
+				
+				sql="delete from SawonMangement where id=num";
+						
+				try {
+					pstmt=conn.prepareStatement(sql);
+					
+					pstmt.setString(1, num);
+					pstmt.execute();
+					
+					this.SelectSawon();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}finally {
+					db.dbClose(pstmt, conn);
+				}
+			}
+			else if (ob==addSawon.btnAdd)
+			{
+				this.insertSawon();
+				
+				this.SelectSawon();
+				
+				addSawon.tfName.setText("");
+				addSawon.tfDept.setText("");
+				addSawon.tfPos.setText("");
+				addSawon.tfTel.setText("");
+				addSawon.tfEmail.setText("");
+				addSawon.tfAddr.setText("");
+				
+				
+				addSawon.setVisible(false);
+			}
+		}
+		
+		
 		
 		
 
