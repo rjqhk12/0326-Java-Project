@@ -1,4 +1,4 @@
-package Java_Project;
+package day0326;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-public class SawonAdd extends JFrame {
+public class SawonAdd extends JFrame implements ActionListener{
 	
 	Container cp;
 	JTextField tfName,tfDept,tfPos,tfTel,tfEmail,tfAddr;
@@ -78,11 +78,18 @@ public class SawonAdd extends JFrame {
 		this.add(btnAdd);
 	}
 
-	public static void main(String[] args) {
+	@Override
+	public void actionPerformed(ActionEvent e) {
 		// TODO Auto-generated method stub
-		new SawonAdd("사원정보입력");
+		
+		
+		
+		
 	}
 
-	
+	/*public static void main(String[] args) {
+		// TODO Auto-generated method stub
+		new SawonAdd("사원정보입력");
+	}*/
 
 }

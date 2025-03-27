@@ -1,4 +1,4 @@
-package Java_Project;
+package day0326;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -24,7 +24,7 @@ public class SawonUpdate extends JFrame{
 	cp=this.getContentPane();
 	cp.setBackground(Color.white);
 	initDesign();
-	this.setVisible(true);
+	this.setVisible(false);
 	}
 	
 	public void initDesign()
@@ -78,9 +78,9 @@ public class SawonUpdate extends JFrame{
 		
 	}
 
-	public static void main(String[] args) {
+	/*public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new SawonUpdate("사원정보수정");
-	}
+	}*/
 
 }
