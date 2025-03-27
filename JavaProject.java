@@ -1,4 +1,4 @@
-package day0326;
+package Java_Project;
 
 import java.awt.Color;
 import java.awt.Container;
@@ -12,6 +12,7 @@ import java.util.Vector;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -27,7 +28,7 @@ public class JavaProject extends JFrame implements ActionListener {
 	DefaultTableModel model;
 	DbConnect db=new DbConnect();
 	
-	SawonAdd addSawon=new SawonAdd("사원추가폼");
+	SawonAdd addSawon;
 
 		//생성자
 		public JavaProject(String title) {
@@ -58,6 +59,9 @@ public class JavaProject extends JFrame implements ActionListener {
 			this.add(js);
 			
 			
+			SelectSawon();
+			
+			
 			btnAdd=new JButton("사원 추가");
 			btnAdd.setBounds(30, 20, 90, 30);
 			this.add(btnAdd);
@@ -72,7 +76,7 @@ public class JavaProject extends JFrame implements ActionListener {
 			btnDel=new JButton("사원 삭제");
 			btnDel.setBounds(230, 20, 90, 30);
 			this.add(btnDel);
-			btnAdd.addActionListener(this);
+			btnDel.addActionListener(this);
 
 			btnSearch=new JButton("사원 검색");
 			btnSearch.setBounds(330, 20, 90, 30);
@@ -83,8 +87,6 @@ public class JavaProject extends JFrame implements ActionListener {
 			btnSelect.setBounds(430, 20, 90, 30);
 			this.add(btnSelect);
 			btnSelect.addActionListener(this);
-			
-			addSawon.btnAdd.addActionListener(this);
 			
 
 		}
@@ -101,6 +103,7 @@ public class JavaProject extends JFrame implements ActionListener {
 			try {
 				pstmt=conn.prepareStatement(sql);
 				rs=pstmt.executeQuery();
+				
 				while(rs.next())
 				{
 					Vector<String >data=new Vector<String>();
@@ -114,20 +117,73 @@ public class JavaProject extends JFrame implements ActionListener {
 					
 					model.addRow(data);					
 					
-				}
-
-				
+				}				
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}finally {
+				db.dbClose(rs, pstmt, conn);
+			}
+		}
+
+		
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			// TODO Auto-generated method stub
+			
+			Object ob=e.getSource();
+			
+			Connection conn=db.getConnection();
+			PreparedStatement pstmt=null;
+			String sql="";
+			
+			if(ob==btnAdd)
+			{
+				
 			}
 			
-			
+			if(ob==btnSelect)
+			{
+				SelectSawon();
+			}
 		
+			if(ob==btnDel)
+			{
+				int row=table.getSelectedRow()	;
+				System.out.println(row);
+				
+				if(row==-1)
+				{
+					JOptionPane.showMessageDialog(this, "삭제할 행을 선택해주세요.");
+					return;
+				}
+				
+				String num=(String)model.getValueAt(row, 0);
+				System.out.println(num);
+				
+				sql="delete from SawonMangement where num=num";
+						
+				try {
+					pstmt=conn.prepareStatement(sql);
+					
+					pstmt.setString(1, num);
+					pstmt.execute();
+					
+					this.SelectSawon();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}finally {
+					db.dbClose(pstmt, conn);
+				}
+			}
 		}
 		
 		public void insertSawon()
 		{
+			
+			
+			
 			String name=addSawon.tfName.getText();
 			String dept=addSawon.tfDept.getText();
 			String pos=addSawon.tfPos.getText();
@@ -160,45 +216,6 @@ public class JavaProject extends JFrame implements ActionListener {
 				db.dbClose(pstmt, conn);
 			}
 		
-		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		@Override
-		public void actionPerformed(ActionEvent e) {
-			// TODO Auto-generated method stub
-			
-			Object ob=e.getSource();
-			
-			if(ob==btnSelect)
-			{
-				SelectSawon();
-			}
-		
-			else if(ob==btnAdd)
-			{
-				addSawon.setVisible(true);
-			}
-			else if(ob==addSawon.btnAdd)
-			{
-				this.insertSawon();
-				
-				
-				addSawon.setVisible(false);
-			}
-			
-			
-			
-			
-			
-			
-			
 		}
 		
 		
