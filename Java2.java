@@ -49,7 +49,7 @@ public class Java2 extends JFrame implements ActionListener {
 		public Java2(String title) {
 			super(title);//JFrame 부모생성자를 통해서 창제목으로 제목을 보게하자
 			
-			this.setBounds(200, 100, 900, 500);
+			this.setBounds(200, 100, 750, 500);
 			
 			//색상
 			//this.setBackground(Color.BLUE); // 이렇게만 하면 안나옴.
@@ -58,7 +58,7 @@ public class Java2 extends JFrame implements ActionListener {
 			cp=this.getContentPane();
 			this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 			initDesign();
-			cp.setBackground(Color.WHITE);
+			cp.setBackground(Color.white);
 			
 			this.setVisible(true);
 			
@@ -134,11 +134,14 @@ public class Java2 extends JFrame implements ActionListener {
 		
 		public void SawonInfo(String num)
 		{
+			JLabel lblname,lbldept,lblposition,lbltel,lblemail,lbladdr;
 			
 			
 			
 			
 			
+			
+		    
 			
 			Connection conn=db.getConnection();
 			PreparedStatement pstmt=null;
@@ -169,36 +172,42 @@ public class Java2 extends JFrame implements ActionListener {
 				
 				 
 				 
-				 	JLabel lblname= new JLabel("이름 : "+name);
+				 	lblname= new JLabel("이름 : "+name);
 					lblname.setBounds(550, 200, 100, 30);
 					cp.add(lblname);
+					//lblname.setOpaque(true);
 
-					JLabel lbldept= new JLabel("부서 : "+dept);
+					lbldept= new JLabel("부서 : "+dept);
 					lbldept.setBounds(550, 230, 100, 30);
 					cp.add(lbldept);
+					//lbldept.setOpaque(true);
 					
-					JLabel lblposition= new JLabel("직급 : "+position);
+					lblposition= new JLabel("직급 : "+position);
 					lblposition.setBounds(550, 260, 100, 30);
 					cp.add(lblposition);
+					//lblposition.setOpaque(true);
 					
-					JLabel lbltel= new JLabel("전화번호 : "+tel);
-					lbltel.setBounds(550, 290, 200, 30);
+					lbltel= new JLabel("전화번호 : "+tel);
+					lbltel.setBounds(550, 290, 400, 30);
 					cp.add(lbltel);
+				//lbltel.setOpaque(true);
 					
 					
-					JLabel lblemail= new JLabel("이메일 : "+email);
+					lblemail= new JLabel("이메일 : "+email);
 					lblemail.setBounds(550, 320, 200, 30);
 					cp.add(lblemail);
+					//lblemail.setOpaque(true);
 					
-					JLabel lbladdr= new JLabel("주소 : "+addr);
+					lbladdr= new JLabel("주소 : "+addr);
 					lbladdr.setBounds(550, 350, 200, 30);
 					cp.add(lbladdr);	 
+					//lbladdr.setOpaque(true);
 					
 					pDraw.setBounds(550, 30, 140, 170);
 					
 					pDraw.setBackground(Color.white);
 					this.add(pDraw);				
-					//pDraw.repaint();
+					pDraw.repaint();
 					
 					
 					
@@ -533,6 +542,8 @@ public class Java2 extends JFrame implements ActionListener {
 			else if(ob==btnInfo)
 			{	
 				
+				
+				
 				int row=table.getSelectedRow()	;
 				
 				
@@ -545,8 +556,15 @@ public class Java2 extends JFrame implements ActionListener {
 				String num=(String)model.getValueAt(row, 1);
 				
 				
+				cp.removeAll();  // 모든 컴포넌트 제거			
+			    cp.repaint();    // 화면을 새로 고침
+			    initDesign();
+			    SelectSawon();
+			    
+				
 				SawonInfo(num);
 				
+
 				
 				
 				

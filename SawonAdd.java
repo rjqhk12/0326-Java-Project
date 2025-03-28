@@ -97,7 +97,7 @@ public class SawonAdd extends JFrame implements ActionListener{
 		this.add(btnAdd);
 		
 		pDraw.setBounds(330, 30, 140, 170);
-		pDraw.setBackground(Color.orange);
+		pDraw.setBackground(Color.white);
 		this.add(pDraw);
 		
 		
