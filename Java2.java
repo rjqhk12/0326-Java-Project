@@ -238,7 +238,7 @@ public class Java2 extends JFrame implements ActionListener {
 			PreparedStatement pstmt=null;
 			ResultSet rs=null;
 			
-			String sql="select ROWNUM no,id,name,dept,position,tel,email,addr from SawonManagement order by name";
+			String sql="select ROWNUM no,id,name,dept,position,tel,email,addr from SawonManagement order by no";
 			
 			try {
 				pstmt=conn.prepareStatement(sql);
@@ -505,7 +505,7 @@ public class Java2 extends JFrame implements ActionListener {
 				addSawon.tfTel.setText("");
 				addSawon.tfEmail.setText("");
 				addSawon.tfAddr.setText("");
-				
+				addSawon.imageName=null;
 				
 				addSawon.setVisible(false);
 			}
