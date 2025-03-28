@@ -455,6 +455,8 @@ public class Java2 extends JFrame implements ActionListener {
 			if(ob==btnAdd)
 			{
 				addSawon.setVisible(true);
+				
+
 			}
 			
 			else if(ob==btnSelect)
@@ -474,10 +476,10 @@ public class Java2 extends JFrame implements ActionListener {
 				}
 				
 				String num=(String)model.getValueAt(row, 1);
-				System.out.println(num);
+				
 				
 				sql="delete from SawonManagement where id=?";
-						
+				
 				try {
 					pstmt=conn.prepareStatement(sql);
 					
@@ -486,6 +488,8 @@ public class Java2 extends JFrame implements ActionListener {
 					pstmt.execute();
 					
 					this.SelectSawon();
+					
+					JOptionPane.showMessageDialog(this, "삭제되었습니다");
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -508,6 +512,7 @@ public class Java2 extends JFrame implements ActionListener {
 				addSawon.imageName=null;
 				
 				addSawon.setVisible(false);
+				JOptionPane.showMessageDialog(this, "입력되었습니다.");
 			}
 			
 			
@@ -524,6 +529,7 @@ public class Java2 extends JFrame implements ActionListener {
 				
 				//String num=JOptionPane.showInputDialog("번호입력");
 				this.oneSawonData(num);
+
 				//updateSawon.setVisible(true);
 			}
 			else if(ob==updateSawon.btnUpdate)
@@ -531,6 +537,8 @@ public class Java2 extends JFrame implements ActionListener {
 				this.updateSawon();
 				this.SelectSawon();
 				updateSawon.setVisible(false);
+				JOptionPane.showMessageDialog(this, "수정되었습니다.");
+
 			}
 			else if(ob==btnSearch)
 			{
